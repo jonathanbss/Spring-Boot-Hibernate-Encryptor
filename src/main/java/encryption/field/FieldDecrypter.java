@@ -5,19 +5,19 @@ import java.lang.reflect.Field;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ReflectionUtils;
 
-import main.DatabaseServiceApplication;
-import main.entities.EncryptionEntity;
-import main.java.EncryptionMethod;
-import main.java.FieldProperties;
+import main.java.encryption.CryptoUtils;
+import main.java.encryption.EncryptionMethod;
 import main.java.encryption.EncryptionUtils;
-import utils.WrongKeyException;
-import utils.encryption.CryptoUtils;
+import main.java.encryption.FieldProperties;
+import main.java.encryption.configuration.EncryptionConfiguration;
+import main.java.encryption.configuration.EncryptionEntity;
+import main.java.error.WrongKeyException;
 
 @Component
 public class FieldDecrypter {
     
     public void decrypt(Object entity, EncryptionEntity encryptionEntity) {
-    	decrypt(entity, encryptionEntity.getValue());
+    	decrypt(entity, encryptionEntity.getEncryptionKey());
     }
     
     public void decrypt(Object entity, String key) {
@@ -32,9 +32,9 @@ public class FieldDecrypter {
             throw new IllegalStateException("Encrypted annotation was used on a non-String field");
         }
         try {
-        	String encryptionKey = key;
+        	char[] encryptionKey = key.toCharArray();
             if(properties.encryptionMethod() == EncryptionMethod.MASTER_KEY) {
-            	encryptionKey = System.getenv(DatabaseServiceApplication.MASTER_KEY_ENV_NAME);
+            	encryptionKey = EncryptionConfiguration.getInstance().getConfiguration().getMasterKey();
             }
 			ReflectionUtils.setField(field, entity, CryptoUtils.decryptWithKey(value.toString(), encryptionKey));
 		} catch (WrongKeyException e) {

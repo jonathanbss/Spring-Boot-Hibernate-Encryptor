@@ -1,4 +1,4 @@
-package main.java;
+package main.java.encryption;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

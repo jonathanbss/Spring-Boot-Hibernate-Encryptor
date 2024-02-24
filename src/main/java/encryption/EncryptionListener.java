@@ -16,11 +16,10 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import main.DatabaseServiceApplication;
-import main.encryption.field.FieldDecrypter;
-import main.encryption.field.FieldEncrypter;
-import main.entities.EncryptionEntity;
 import main.entities.EntityInterface;
-import utils.encryption.CryptoUtils;
+import main.java.encryption.configuration.EncryptionEntity;
+import main.java.encryption.field.FieldDecrypter;
+import main.java.encryption.field.FieldEncrypter;
 
 @Component
 public class EncryptionListener implements PreInsertEventListener, PreUpdateEventListener, PostLoadEventListener {

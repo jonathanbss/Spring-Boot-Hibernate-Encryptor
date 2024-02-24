@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.PersistenceUnit;
+import main.java.encryption.configuration.EncryptionConfiguration;
 
 @Component
 public class EncryptionBeanPostProcessor implements BeanPostProcessor {
@@ -25,6 +26,11 @@ public class EncryptionBeanPostProcessor implements BeanPostProcessor {
 
     @PostConstruct
     public void registerListeners() {
+    	if(!EncryptionConfiguration.isInstanceAvailable() || EncryptionConfiguration.getInstance().getConfiguration() == null) {
+    		logger.error("Encryption has not been configured correctly. Please create EncryptionConfiguration-class and set Configuration field");
+    		return;
+    	}
+    	
         SessionFactoryImpl sessionFactory = emf.unwrap(SessionFactoryImpl.class);
         EventListenerRegistry registry = ((SessionFactoryImpl) sessionFactory).getServiceRegistry().getService(EventListenerRegistry.class);
         registry.appendListeners(EventType.POST_LOAD, encryptionListener);

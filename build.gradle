@@ -25,17 +25,15 @@ repositories {
 	mavenCentral()
 }
 
-bootJar {
-	enabled = false
-	archiveFileName = "${archivesBaseName}-${project.version}-plain.jar" // Hier setzen Sie den Namen der Haupt-Jar-Datei
-    into 'resources', {
-        from 'resources'
-    }
+test {
+    useJUnitPlatform()
 }
 
 dependencies {
 	implementation 'org.springframework.security:spring-security-web'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    testImplementation('junit:junit:4.13')
+	
 }
 
 java {

@@ -5,8 +5,6 @@ import java.lang.reflect.Field;
 
 import org.springframework.core.annotation.AnnotationUtils;
 
-import main.java.FieldProperties;
-
 public abstract class EncryptionUtils {
     
 	public static boolean isFieldEncrypted(Field field) {
