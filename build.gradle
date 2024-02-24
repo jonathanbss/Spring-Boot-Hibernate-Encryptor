@@ -5,18 +5,6 @@ plugins {
 	id 'eclipse'
 }
 
-sourceSets.main.java.srcDirs = ['src']
-sourceSets {
-    main {
-        java {
-            srcDirs = ['src']
-        }
-        resources {
-            srcDirs = ['resources']
-        }
-    }
-}
-
 archivesBaseName = 'SpringBootHibernateEncryption'
 group = 'de.jonathan.boss.hibernate.encryption'
 sourceCompatibility = '1.17'
@@ -32,8 +20,7 @@ test {
 dependencies {
 	implementation 'org.springframework.security:spring-security-web'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    testCompile('junit:junit:4.13')
-    testCompile('org.springframework.boot:spring-boot-starter-test')
+    testImplementation('junit:junit:4.13')
 	
 }
 

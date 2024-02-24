@@ -1,4 +1,4 @@
-package main.java.encryption.configuration;
+package de.jonathan.boss.encryption.configuration;
 
 public interface EncryptionInterface {
 	

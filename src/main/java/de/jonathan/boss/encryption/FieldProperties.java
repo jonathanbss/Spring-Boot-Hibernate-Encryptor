@@ -1,4 +1,4 @@
-package main.java.encryption;
+package de.jonathan.boss.encryption;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

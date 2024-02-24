@@ -1,17 +1,17 @@
-package main.java.encryption.field;
+package de.jonathan.boss.encryption.field;
 
 import java.lang.reflect.Field;
 
 import org.springframework.stereotype.Component;
 import org.springframework.util.ReflectionUtils;
 
-import main.java.CryptoUtils;
-import main.java.EncryptionUtils;
-import main.java.encryption.EncryptionMethod;
-import main.java.encryption.FieldProperties;
-import main.java.encryption.configuration.EncryptionConfiguration;
-import main.java.encryption.configuration.EncryptionInterface;
-import main.java.error.WrongKeyException;
+import de.jonathan.boss.CryptoUtils;
+import de.jonathan.boss.EncryptionUtils;
+import de.jonathan.boss.encryption.EncryptionMethod;
+import de.jonathan.boss.encryption.FieldProperties;
+import de.jonathan.boss.encryption.configuration.EncryptionConfiguration;
+import de.jonathan.boss.encryption.configuration.EncryptionInterface;
+import de.jonathan.boss.error.WrongKeyException;
 
 @Component
 public class FieldDecrypter {

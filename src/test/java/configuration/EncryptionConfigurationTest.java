@@ -1,12 +1,12 @@
-package test;
+package configuration;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-import main.java.encryption.configuration.EncryptionConfiguration;
+import de.jonathan.boss.encryption.configuration.EncryptionConfiguration;
 
 public class EncryptionConfigurationTest {
 

@@ -1,12 +1,12 @@
-package main.java.encryption.repository;
+package de.jonathan.boss.encryption.repository;
 
+import de.jonathan.boss.encryption.EncryptionMethod;
+import de.jonathan.boss.encryption.FieldProperties;
+import de.jonathan.boss.encryption.configuration.EncryptionInterface;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import main.java.encryption.EncryptionMethod;
-import main.java.encryption.FieldProperties;
-import main.java.encryption.configuration.EncryptionInterface;
 
 @Entity
 public class EncryptionEntity implements EncryptionInterface {

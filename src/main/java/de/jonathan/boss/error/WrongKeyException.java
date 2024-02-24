@@ -1,4 +1,4 @@
-package main.java.error;
+package de.jonathan.boss.error;
 
 /**
  * This class is a custom exception which can be thrown if an decryption fails with an invalid key

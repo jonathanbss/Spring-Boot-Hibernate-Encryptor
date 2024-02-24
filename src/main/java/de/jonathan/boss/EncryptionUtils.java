@@ -1,11 +1,11 @@
-package main.java;
+package de.jonathan.boss;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
 import org.springframework.core.annotation.AnnotationUtils;
 
-import main.java.encryption.FieldProperties;
+import de.jonathan.boss.encryption.FieldProperties;
 
 public abstract class EncryptionUtils {
     

@@ -1,4 +1,4 @@
-package main.java.encryption;
+package de.jonathan.boss.encryption;
 
 import org.hibernate.event.service.spi.EventListenerRegistry;
 import org.hibernate.event.spi.EventType;
@@ -9,10 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.stereotype.Component;
 
+import de.jonathan.boss.encryption.configuration.EncryptionConfiguration;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.PersistenceUnit;
-import main.java.encryption.configuration.EncryptionConfiguration;
 
 @Component
 public class EncryptionBeanPostProcessor implements BeanPostProcessor {

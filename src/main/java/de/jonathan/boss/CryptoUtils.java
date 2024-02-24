@@ -1,4 +1,4 @@
-package main.java;
+package de.jonathan.boss;
 
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
@@ -23,7 +23,7 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
-import main.java.error.WrongKeyException;
+import de.jonathan.boss.error.WrongKeyException;
 
 /**
  * This class contains all the methods for de- and encryption

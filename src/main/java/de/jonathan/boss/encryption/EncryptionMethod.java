@@ -1,4 +1,4 @@
-package main.java.encryption;
+package de.jonathan.boss.encryption;
 
 public enum EncryptionMethod {
 	DEFAULT, MASTER_KEY;

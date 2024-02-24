@@ -1,4 +1,4 @@
-package main.java.encryption;
+package de.jonathan.boss.encryption;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import main.java.encryption.repository.EncryptionEntity;
-import main.java.encryption.repository.EncryptionRepository;
+import de.jonathan.boss.encryption.repository.EncryptionEntity;
+import de.jonathan.boss.encryption.repository.EncryptionRepository;
 
 @Service
 public class EncryptionEntityService {
