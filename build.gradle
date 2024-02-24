@@ -1,0 +1,43 @@
+plugins {
+	id 'org.springframework.boot' version '3.0.1'
+	id 'io.spring.dependency-management' version '1.1.0'
+	id 'java'
+	id 'eclipse'
+}
+
+sourceSets.main.java.srcDirs = ['src']
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src']
+        }
+        resources {
+            srcDirs = ['resources']
+        }
+    }
+}
+
+archivesBaseName = 'SpringBootHibernateEncryption'
+group = 'de.jonathan.boss.hibernate.encryption'
+sourceCompatibility = '1.17'
+
+repositories {
+	mavenCentral()
+}
+
+bootJar {
+	enabled = false
+	archiveFileName = "${archivesBaseName}-${project.version}-plain.jar" // Hier setzen Sie den Namen der Haupt-Jar-Datei
+    into 'resources', {
+        from 'resources'
+    }
+}
+
+dependencies {
+	implementation 'org.springframework.security:spring-security-web'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+}
+
+java {
+    withSourcesJar()
+}
