@@ -1,6 +1,6 @@
 package main.java.encryption.configuration;
 
-public interface EncryptionEntity {
+public interface EncryptionInterface {
 	
 	public String getEncryptionKey();
 }

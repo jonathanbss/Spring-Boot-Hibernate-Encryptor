@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import main.java.encryption.configuration.EncryptionEntity;
-import main.repository.EncryptionRepository;
+import main.java.encryption.repository.EncryptionEntity;
+import main.java.encryption.repository.EncryptionRepository;
 
 @Service
 public class EncryptionEntityService {

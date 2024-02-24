@@ -1,7 +1,8 @@
 package main.java.encryption;
 
-import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
+import java.util.List;
 
 import org.hibernate.event.spi.PostLoadEvent;
 import org.hibernate.event.spi.PostLoadEventListener;
@@ -15,11 +16,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import main.DatabaseServiceApplication;
-import main.entities.EntityInterface;
-import main.java.encryption.configuration.EncryptionEntity;
+import main.java.CryptoUtils;
+import main.java.encryption.configuration.EncryptionConfiguration;
+import main.java.encryption.configuration.EncryptionInterface;
+import main.java.encryption.configuration.EntityInterface;
 import main.java.encryption.field.FieldDecrypter;
 import main.java.encryption.field.FieldEncrypter;
+import main.java.encryption.repository.EncryptionEntity;
 
 @Component
 public class EncryptionListener implements PreInsertEventListener, PreUpdateEventListener, PostLoadEventListener {
@@ -32,16 +35,8 @@ public class EncryptionListener implements PreInsertEventListener, PreUpdateEven
 
 	@Override
     public void onPostLoad(PostLoadEvent event) {
-        if(!(event.getEntity() instanceof EncryptionEntity)) {
-	    	EncryptionEntity encryptionEntity = findEncryptionEntity(event.getEntity(), 0);
-			fieldDecrypter.decrypt(event.getEntity(), encryptionEntity);
-        } else {
-        	EncryptionEntity encryptionEntity = (EncryptionEntity) event.getEntity();
-        	//Only the encryption records which are NOT the master key hash should be decrypted
-        	if(encryptionEntity.getEntityId() != 0 && encryptionEntity.getRowId() != 0) {
-    			fieldDecrypter.decrypt(event.getEntity(), System.getenv(DatabaseServiceApplication.MASTER_KEY_ENV_NAME));
-        	}
-        }
+    	EncryptionInterface encryptionEntity = findEncryptionEntity(event.getEntity(), 0);
+		fieldDecrypter.decrypt(event.getEntity(), encryptionEntity);
     }
     
 	@Override
@@ -49,17 +44,9 @@ public class EncryptionListener implements PreInsertEventListener, PreUpdateEven
         Object[] state = event.getState();
         String[] propertyNames = event.getPersister().getPropertyNames();
         Object entity = event.getEntity();
-        if(!(entity instanceof EncryptionEntity)) {
-	    	EncryptionEntity encryptionEntity = findEncryptionEntity(event.getEntity(), event.getId());
-			fieldEncrypter.encrypt(state, propertyNames, entity, encryptionEntity);
-			encryptionEntityService.saveEncryptionEntity(encryptionEntity);
-        } else {
-        	EncryptionEntity encryptionEntity = (EncryptionEntity) event.getEntity();
-        	//Only the encryption records which are NOT the master key hash should be encrypted
-        	if(encryptionEntity.getEntityId() != 0 && encryptionEntity.getRowId() != 0) {
-    			fieldEncrypter.encrypt(state, propertyNames, entity, System.getenv(DatabaseServiceApplication.MASTER_KEY_ENV_NAME));
-        	}
-    	}
+		EncryptionEntity encryptionEntity = findEncryptionEntity(event.getEntity(), event.getId());
+		fieldEncrypter.encrypt(state, propertyNames, entity, encryptionEntity);
+		encryptionEntityService.saveEncryptionEntity(encryptionEntity);
     	return false;
     }
     
@@ -68,11 +55,11 @@ public class EncryptionListener implements PreInsertEventListener, PreUpdateEven
         Object[] state = event.getState();
         String[] propertyNames = event.getPersister().getPropertyNames();
         Object entity = event.getEntity();
-        if(!(entity instanceof EncryptionEntity)) {
-	    	EncryptionEntity encryptionEntity = findEncryptionEntity(event.getEntity(), event.getId());
+        if(!(entity instanceof EncryptionInterface)) {
+	    	EncryptionInterface encryptionEntity = findEncryptionEntity(event.getEntity(), event.getId());
 			fieldEncrypter.encrypt(state, propertyNames, entity, encryptionEntity);
         } else {
-        	fieldEncrypter.encrypt(state, propertyNames, entity, System.getenv(DatabaseServiceApplication.MASTER_KEY_ENV_NAME));
+        	fieldEncrypter.encrypt(state, propertyNames, entity, EncryptionConfiguration.getInstance().getConfiguration().getMasterKey());
         }
         return false;
     }
@@ -80,27 +67,29 @@ public class EncryptionListener implements PreInsertEventListener, PreUpdateEven
 	@SuppressWarnings("unchecked")
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
     @Async
-	private EncryptionEntity findEncryptionEntity(Object entity, Serializable insertId) {
+	private EncryptionEntity findEncryptionEntity(Object entity, Object insertId) {
     	EncryptionEntity encryptionEntity = null;
-		if(entity.getClass().getSuperclass() == EntityInterface.class) {
+    	List<Class<?>> test = Arrays.asList(entity.getClass().getInterfaces());
+		if(test.contains(EntityInterface.class)) {
 			int id = (int) insertId;
     		Class<? extends EntityInterface> classLoaded = (Class<? extends EntityInterface>) entity.getClass();
     		int idValue = 0;
+    		int entityId = 0;
     		if(id == 0) {
 				try {
 					idValue = (int) classLoaded.getMethod("getId").invoke(entity);
+					entityId = (int) classLoaded.getMethod("getEntityId").invoke(entity);
 				} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
 					e.printStackTrace();
 				}
     		} else {
     			idValue = id;
     		}
-    		int entityId = EntityInterface.getEntityId(classLoaded);
     		encryptionEntity = encryptionEntityService.find(idValue, entityId);
 			if(encryptionEntity == null || encryptionEntity.getId() == 0) {
 				encryptionEntity = new EncryptionEntity();
-				encryptionEntity.setEntityId(entityId);
-				encryptionEntity.setRowId(idValue);
+				encryptionEntity.setRefEntityId(entityId);
+				encryptionEntity.setRefRowId(idValue);
 				encryptionEntity.setValue(CryptoUtils.generateSecureKey());
 			}
     	}

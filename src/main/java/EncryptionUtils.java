@@ -1,9 +1,11 @@
-package main.java.encryption;
+package main.java;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
 import org.springframework.core.annotation.AnnotationUtils;
+
+import main.java.encryption.FieldProperties;
 
 public abstract class EncryptionUtils {
     
